@@ -14,7 +14,7 @@ public class Config {
 	public void load() {
 		final FileConfiguration config = plugin.getConfig();
 
-		config.addDefault("bottle.xpCost", 10);
+		config.addDefault("bottle.xpCost", 5);
 		BottledExp.xpCost = config.getInt("bottle.xpCost");
 		config.set("bottle.xpCost", BottledExp.xpCost);
 
