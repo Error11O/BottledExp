@@ -1,25 +1,26 @@
 package me.sacnoth.bottledexp;
 
 import java.util.HashMap;
+import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.jetbrains.annotations.NotNull;
 
-public class BottledExpCommandExecutor implements CommandExecutor {
+public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter {
 
 	public BottledExpCommandExecutor(BottledExp plugin) {
 	}
 
 	@Override
-	public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd,
-							 @NotNull String commandLabel, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd,
+							 String commandLabel, String[] args) {
 		if ((sender instanceof Player player)) {
             if (cmd.getName().equalsIgnoreCase("bottle")
 					&& BottledExp.checkPermission("bottle.use", player)) {
@@ -33,12 +34,12 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 				if (args.length == 1) {
 					switch (args[0]) {
 						case "max":
-							if (!BottledExp.checkPermission("bottle.max", player)) return false;
+							if (!BottledExp.checkPermission("bottle.max", player)) return true;
 							amount = (int) Math.floor((double) currentxp / BottledExp.xpCost);
 							amount = Math.min(BottledExp.countItems(player, Material.GLASS_BOTTLE) / BottledExp.amountConsumed, amount);
 							break;
 						case "reload":
-							if (!BottledExp.checkPermission("bottle.reload", player)) return false;
+							if (!BottledExp.checkPermission("bottle.reload", player) && !player.isOp()) return true;
 							BottledExp.config.reload(sender);
 							sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
 							break;
@@ -48,7 +49,7 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 							} catch (NumberFormatException nfe) {
 								sender.sendMessage(ChatColor.RED
 										+ BottledExp.errAmount);
-								return false;
+								return true;
 							}
 							break;
 					}
@@ -58,7 +59,7 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 						return true;
 					} else if (amount <= 0) {
 						amount = 0;
-						sender.sendMessage(BottledExp.langOrder1 + " " + amount
+						sender.sendMessage(ChatColor.GREEN + BottledExp.langOrder1 + " " + amount
 								+ " " + BottledExp.langOrder2);
 						return true;
 					}
@@ -71,29 +72,24 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 								* amount) {
 							money = true;
 						} else {
-							player.sendMessage(BottledExp.errMoney);
+							player.sendMessage(ChatColor.RED + BottledExp.errMoney);
 							return true;
 						}
 					}
 
 					boolean consumeItems = false;
-					if (BottledExp.settingUseItems) // Check if the player has
-													// enough items
+					if (BottledExp.settingUseItems) // Check if the player has enough items
 					{
-						consumeItems = BottledExp.checkInventory(player,
-								Material.GLASS_BOTTLE, amount
-										* BottledExp.amountConsumed);
+						consumeItems = BottledExp.checkInventory(player, Material.GLASS_BOTTLE, amount * BottledExp.amountConsumed);
 						if (!consumeItems) {
-							sender.sendMessage(ChatColor.RED
-									+ BottledExp.langItemConsumer);
+							sender.sendMessage(ChatColor.RED + BottledExp.langItemConsumer);
 							return true;
 						}
 					}
 
 					PlayerInventory inventory = player.getInventory();
 					ItemStack items = new ItemStack(Material.EXPERIENCE_BOTTLE, amount);
-					HashMap<Integer, ItemStack> leftoverItems = inventory
-							.addItem(items);
+					HashMap<Integer, ItemStack> leftoverItems = inventory.addItem(items);
 					player.setTotalExperience(0);
 					player.setLevel(0);
 					player.setExp(0);
@@ -101,9 +97,7 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 					if (leftoverItems.containsKey(0)) {
 						int refundAmount = leftoverItems.get(0).getAmount();
 						player.giveExp(refundAmount * BottledExp.xpCost);
-						player.sendMessage(BottledExp.langRefund + ": "
-								+ refundAmount);
-						amount -= refundAmount;
+						player.sendMessage(ChatColor.GREEN + BottledExp.langRefund + ": " + refundAmount); amount -= refundAmount;
 					}
 
 					if (money) // Remove money from player
@@ -120,14 +114,12 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 						if (!BottledExp.consumeItem(player,
 								Material.GLASS_BOTTLE, amount
 										* BottledExp.amountConsumed)) {
-							sender.sendMessage(ChatColor.RED
-									+ BottledExp.langItemConsumer);
+							sender.sendMessage(ChatColor.RED + BottledExp.langItemConsumer);
 							return true;
 						}
 					}
 
-					sender.sendMessage(BottledExp.langOrder1 + " " + amount
-							+ " " + BottledExp.langOrder2);
+					sender.sendMessage(ChatColor.GREEN + BottledExp.langOrder1 + " " + amount + " " + BottledExp.langOrder2);
 				}
 				return true;
 			}
@@ -136,5 +128,13 @@ public class BottledExpCommandExecutor implements CommandExecutor {
 			return false;
 		}
 		return false;
+	}
+
+	@Override
+	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+		if (commandSender.isOp()){
+			return List.of("reload", "max", "16", "64", "128");
+		}
+		return List.of("max", "16", "64", "128");
 	}
 }

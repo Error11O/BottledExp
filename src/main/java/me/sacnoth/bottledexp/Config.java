@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 
 public class Config {
-	private BottledExp plugin;
+	private final BottledExp plugin;
 
 	public Config(BottledExp plugin) {
 		this.plugin = plugin;
@@ -17,10 +17,6 @@ public class Config {
 		config.addDefault("bottle.xpCost", 10);
 		BottledExp.xpCost = config.getInt("bottle.xpCost");
 		config.set("bottle.xpCost", BottledExp.xpCost);
-
-		config.addDefault("bottle.xpEarn", 10);
-		BottledExp.xpEarn = config.getInt("bottle.xpEarn");
-		config.set("bottle.xpEarn", BottledExp.xpEarn);
 
 		config.addDefault("bottle.useItems", true);
 		BottledExp.settingUseItems = config.getBoolean("bottle.useItems");

@@ -1,5 +1,6 @@
 package me.sacnoth.bottledexp;
 
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import net.milkbowl.vault.economy.Economy;
@@ -16,8 +17,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BottledExp extends JavaPlugin {
 	static Logger log;
-	private BottledExpCommandExecutor myExecutor;
-	static int xpCost;
+    static int xpCost;
 	static int xpEarn;
 	static boolean usePermissions = false;
 	static boolean useVaultEcon = true;
@@ -42,11 +42,10 @@ public class BottledExp extends JavaPlugin {
 	public void onEnable() {
 		log = this.getLogger();
 
-		myExecutor = new BottledExpCommandExecutor(this);
-		getCommand("bottle").setExecutor(myExecutor);
+        BottledExpCommandExecutor myExecutor = new BottledExpCommandExecutor(this);
+		Objects.requireNonNull(getCommand("bottle")).setExecutor(myExecutor);
 
-		getServer().getPluginManager()
-				.registerEvents(new EventListener(), this);
+		getServer().getPluginManager().registerEvents(new EventListener(), this);
 
 		config = new Config(this);
 		config.load();
@@ -70,32 +69,28 @@ public class BottledExp extends JavaPlugin {
 		log.info("You are no longer able to fill XP into Bottles");
 	}
 	
-	private boolean setupPermissions() {
+	private void setupPermissions() {
 		RegisteredServiceProvider<Permission> permissionProvider = getServer()
 				.getServicesManager().getRegistration(
 						net.milkbowl.vault.permission.Permission.class);
 		if (permissionProvider != null) {
 			vaultPermissions = permissionProvider.getProvider();
 		}
-		return (vaultPermissions != null);
 	}
 
 	public static boolean checkPermission(String node, Player player) {
 		if (usePermissions) {
-			player.sendMessage(ChatColor.RED
-					+ "You don't have permission to do this!");
+			player.sendMessage(ChatColor.RED + "You don't have permission to do this!");
 			return false;
 		} else if (useVaultPermissions && vaultPermissions.isEnabled()) {
 			if (vaultPermissions.playerHas(player.getWorld(), player.getName(),
 					node)) {
 				return true;
 			}
-			player.sendMessage(ChatColor.RED
-					+ "You don't have permission to do this!");
+			player.sendMessage(ChatColor.RED + "You don't have permission to do this!");
 			return false;
 		}
-		player.sendMessage(ChatColor.RED
-				+ "Neither PEX nor Vault found, BottledExp will not work properly!");
+		player.sendMessage(ChatColor.RED + "Neither PEX nor Vault found, BottledExp will not work properly!");
 		return false;
 	}
 
