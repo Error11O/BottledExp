@@ -133,8 +133,8 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
 		if (commandSender.isOp()){
-			return List.of("reload", "max", "16", "64", "128");
+			return List.of("reload", "max", "64", "32", "16");
 		}
-		return List.of("max", "16", "64", "128");
+		return List.of("max", "64", "32", "16");
 	}
 }

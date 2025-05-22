@@ -45,8 +45,6 @@ public class BottledExp extends JavaPlugin {
         BottledExpCommandExecutor myExecutor = new BottledExpCommandExecutor(this);
 		Objects.requireNonNull(getCommand("bottle")).setExecutor(myExecutor);
 
-		getServer().getPluginManager().registerEvents(new EventListener(), this);
-
 		config = new Config(this);
 		config.load();
 
