@@ -3,14 +3,23 @@ version: ${project.version}
 api-version: '1.21'
 description: Fills the player's XP into a bottle
 author: sacnoth, Error110
-website: http://www.bukkit.org
 
 main: me.sacnoth.bottledexp.BottledExp
-database: false
-softdepend: [Vault]
+
+permissions:
+   bottle.use:
+      description: Allows the user to do /bottle [total]
+      default: op
+   bottle.max:
+      description: Allows the user to do /bottle max
+      default: op
+   bottle.reload:
+      description: Allows the user to do /bottle reload reloading the config
+      default: op
 
 commands:
    bottle:
       description: Fills XP into a bottle.
-      usage: /<command> [amount]
+      usage: /bottle [amount]
+      permission: bottle.use
       permission-message: You don't have permission to do this

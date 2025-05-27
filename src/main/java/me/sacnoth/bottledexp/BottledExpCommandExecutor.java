@@ -19,11 +19,10 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd,
-							 String commandLabel, String[] args) {
+	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		if ((sender instanceof Player player)) {
             if (cmd.getName().equalsIgnoreCase("bottle")
-					&& BottledExp.checkPermission("bottle.use", player)) {
+					&& player.hasPermission("bottle.use")) {
 				int currentxp = BottledExp.getPlayerExperience(player);
 
 				if (args.length == 0) {
@@ -34,12 +33,12 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 				if (args.length == 1) {
 					switch (args[0]) {
 						case "max":
-							if (!BottledExp.checkPermission("bottle.max", player)) return true;
+							if (!player.hasPermission("bottle.max")) return true;
 							amount = (int) Math.floor((double) currentxp / BottledExp.xpCost);
 							amount = Math.min(BottledExp.countItems(player, Material.GLASS_BOTTLE) / BottledExp.amountConsumed, amount);
 							break;
 						case "reload":
-							if (!BottledExp.checkPermission("bottle.reload", player) && !player.isOp()) return true;
+							if (!player.hasPermission("bottle.reload")) return true;
 							BottledExp.config.reload(sender);
 							sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
 							break;
@@ -64,21 +63,8 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 						return true;
 					}
 
-					boolean money = false;
-					if (BottledExp.useVaultEcon) // Check if the player has enough
-												// money
-					{
-						if (BottledExp.getBalance(player) > BottledExp.moneyCost
-								* amount) {
-							money = true;
-						} else {
-							player.sendMessage(ChatColor.RED + BottledExp.errMoney);
-							return true;
-						}
-					}
-
 					boolean consumeItems = false;
-					if (BottledExp.settingUseItems) // Check if the player has enough items
+					if (BottledExp.settingUseItems)
 					{
 						consumeItems = BottledExp.checkInventory(player, Material.GLASS_BOTTLE, amount * BottledExp.amountConsumed);
 						if (!consumeItems) {
@@ -98,15 +84,6 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 						int refundAmount = leftoverItems.get(0).getAmount();
 						player.giveExp(refundAmount * BottledExp.xpCost);
 						player.sendMessage(ChatColor.GREEN + BottledExp.langRefund + ": " + refundAmount); amount -= refundAmount;
-					}
-
-					if (money) // Remove money from player
-					{
-						BottledExp.withdrawMoney(player, BottledExp.moneyCost
-								* amount);
-						player.sendMessage(BottledExp.langMoney + ": "
-								+ BottledExp.moneyCost * amount + " "
-								+ BottledExp.economy.currencyNamePlural());
 					}
 
 					if (consumeItems) // Remove items from Player

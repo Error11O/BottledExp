@@ -1,6 +1,7 @@
 bottle:
   xpCost: 5
   useItems: true
+  amountConsumed: 1
 language:
   errAmount: The amount has to be a number!
   errXP: You don't have enough XP!
