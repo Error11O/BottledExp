@@ -1,70 +1,11 @@
-Version: 1.5.1
-Features:
+# BottleEXP
 
-This Plugin allows your players to fill their XP into XP-Bottles, so they can store or sell them freely.
-Installation:
-
-    Place BottledExp.jar in the /plugins folder of your server.
-    Enjoy! 
-
-Configuration:
-
-    The plugin will create a config.yml in which you can customize the 'price' of an bottle.
-    It it possible to change which item is consumed when filling XP into bottles, or whether it should be completely disabled. (on by default).
-    One is also able to choose how much money is needed to fill XP into bottles.
-        This feature requires Vault and an installed economy-plugin. 
-    You are also able to change several language options. 
-
-Permissions:
-
-    bottle.use
-        Grants access to /bottle and /bottle [amount] 
-    bottle.max
-        Grants access to /bottle max
-        bottle.use has to be given 
-    bottle.reload
-        Grants access to /bottle reload
-        bottle.use has to be given 
-
-Commands:
-
-    /bottle
-        Shows the player's current XP 
-    /bottle [amount]
-        Exchanges XP into [amount] bottles 
-    /bottle max
-        Exchanges all XP into bottles. 
-    /bottle reload
-        Reloads the config 
-
-Downloads:
-
-    Download
-    German Localization
-    Source 
-
-Changelog:
-
-    Version 1.5.1:
-        Fixed a bug where the consuming of glass bottles (items) didn't work correctly 
-    Version 1.5:
-        Added an option to consume money when filling XP into bottles. (Requires Vault) 
-    Version 1.4:
-        Added an option to consume a specified item when filling XP into bottles
-        Added an alternate way of getting the players XP 
-    Version 1.3.1:
-        Now checks whether enough space is left in the players inventory 
-    Version 1.3:
-        Added /bottle reload
-        Fixed problems when enchanting items 
-    Version 1.2:
-        Now supports permissions (PEX) 
-    Version 1.1:
-        Fixed a bug where you could create an infinite stack of XP-bottles 
-    Version 1.0:
-        Initial Release 
-
-Donate:
-
-    PayPal (EUR)
-    PayPal (USD)
+This is a simple and efficent bottleEXP plugin based off [sacnoths BottleExp plugin]([https://github.com/sacnoth/BottledExp](https://github.com/sacnoth/BottledExp)) removing old dependecys and cleaning it up for common day use. the plugin consumes xp and glass bottles.
+### Commands
+- /bottle [total] | if you have enough xp and Glass bottles, it will consume your xp and glass bottles and return xp.
+- /bottle max | will find the max ammount of xp bottles you can get the limit being the glass bottles in the players inventory or the xp in there bar.
+- /bottle reload | reloads the plugin config.
+### Permissions
+- bottle.use for /bottle [total] | op default
+- bottle.max for /bottle max | op default
+- bottle.reload for /bottle reload | op default
