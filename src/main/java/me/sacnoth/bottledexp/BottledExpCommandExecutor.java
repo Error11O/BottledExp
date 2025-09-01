@@ -33,6 +33,10 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 				if (args.length == 1) {
 					switch (args[0]) {
 						case "max":
+							if (BottledExp.settingEnchantingTable) {
+								sender.sendMessage(ChatColor.RED + "Right click on a enchanting table to bottle your XP instead.");
+								return true;
+							}
 							if (!player.hasPermission("bottle.max")) return true;
 							amount = (int) Math.floor((double) currentxp / BottledExp.xpCost);
 							amount = Math.min(BottledExp.countItems(player, Material.GLASS_BOTTLE) / BottledExp.amountConsumed, amount);
@@ -43,6 +47,10 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 							sender.sendMessage(ChatColor.GREEN + "Config reloaded!");
 							break;
 						default:
+							if (BottledExp.settingEnchantingTable) {
+								sender.sendMessage(ChatColor.RED + "Right click on a enchanting table to bottle your XP instead.");
+								return true;
+							}
 							try {
 								amount = Integer.valueOf(args[0]).intValue();
 							} catch (NumberFormatException nfe) {
@@ -60,6 +68,11 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 						amount = 0;
 						sender.sendMessage(ChatColor.GREEN + BottledExp.langOrder1 + " " + amount
 								+ " " + BottledExp.langOrder2);
+						return true;
+					}
+
+					if (BottledExp.settingEnchantingTable) {
+						sender.sendMessage(ChatColor.RED + "Right click on a enchanting table to bottle your XP instead.");
 						return true;
 					}
 
@@ -112,6 +125,9 @@ public class BottledExpCommandExecutor implements CommandExecutor, TabCompleter 
 		if (commandSender.isOp()){
 			return List.of("reload", "max", "64", "32", "16");
 		}
-		return List.of("max", "64", "32", "16");
+		else if (!BottledExp.settingEnchantingTable) {
+			return List.of("max", "64", "32", "16");
+		}
+		return List.of();
 	}
 }

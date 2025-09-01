@@ -18,6 +18,10 @@ public class Config {
 		BottledExp.xpCost = config.getInt("bottle.xpCost");
 		config.set("bottle.xpCost", BottledExp.xpCost);
 
+		config.addDefault("bottle.useEnchantingTable", false);
+		BottledExp.settingEnchantingTable = config.getBoolean("bottle.useEnchantingTable");
+		config.set("bottle.useEnchantingTable", BottledExp.settingEnchantingTable);
+
 		config.addDefault("bottle.useItems", true);
 		BottledExp.settingUseItems = config.getBoolean("bottle.useItems");
 		config.set("bottle.useItems", BottledExp.settingUseItems);
@@ -72,6 +76,7 @@ public class Config {
 		BottledExp.xpCost = config.getInt("bottle.xpCost");
 		BottledExp.settingUseItems = config.getBoolean("bottle.useItems");
 		BottledExp.amountConsumed = config.getInt("bottle.amountConsumed");
+		BottledExp.settingEnchantingTable = config.getBoolean("bottle.useEnchantingTable");
 
 		//language config
 		BottledExp.errAmount = config.getString("language.errAmount");

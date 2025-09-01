@@ -10,6 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BottledExp extends JavaPlugin {
+	static boolean settingEnchantingTable;
 	static Logger log;
     static int xpCost;
 	static int xpEarn;
@@ -29,6 +30,8 @@ public class BottledExp extends JavaPlugin {
 
         BottledExpCommandExecutor myExecutor = new BottledExpCommandExecutor(this);
 		Objects.requireNonNull(getCommand("bottle")).setExecutor(myExecutor);
+
+		this.getServer().getPluginManager().registerEvents(new EnchantingTableListener(), this);
 
 		config = new Config(this);
 		config.load();

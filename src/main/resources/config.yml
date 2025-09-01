@@ -1,6 +1,7 @@
 bottle:
   xpCost: 5
   useItems: true
+  useEnchantingTable: false
   amountConsumed: 1
 language:
   errAmount: The amount has to be a number!
